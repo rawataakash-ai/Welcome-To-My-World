@@ -1,102 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Aakash Singh Rawat - Welcome To My World</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; }
-    header {
-      background: #0a7ad1; 
-      color: white; 
-      padding: 15px; 
-      text-align: center; 
-      font-size: 20px;
-    }
+    :root { --brand:#0a7ad1; --ink:#222; --bg:#f8f8f8; --card:#e9f5ff; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Arial, sans-serif; background: var(--bg); color: var(--ink); }
+    header { background: var(--brand); color:#fff; padding:14px 16px; text-align:center; font-weight:600; }
     nav {
-      background: #333; 
-      display: flex; 
-      flex-wrap: wrap;
-      padding: 10px;
+      background:#333; display:flex; flex-wrap:wrap; gap:8px; padding:10px 12px; position: sticky; top:0; z-index:5;
     }
-    nav a {
-      color: white; 
-      margin: 5px 10px; 
-      text-decoration: none; 
-      padding: 8px 12px;
-      cursor: pointer;
+    nav button {
+      appearance:none; border:0; background:transparent; color:#fff; padding:8px 12px; border-radius:6px; cursor:pointer;
+      font-size:14px;
     }
-    nav a:hover { background: #555; border-radius: 5px; }
-    .container { padding: 20px; }
+    nav button:hover { background:#555; }
+    nav button.active { background:#fff; color:#333; font-weight:700; }
+    .container { padding:20px; max-width: 1000px; margin: 0 auto; }
     .card {
-      background: #e9f5ff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      background: var(--card); padding: 20px; border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08); min-height: 160px;
     }
-    h2 { color: #0a7ad1; }
-    .nav-buttons {
-      display: flex; 
-      justify-content: space-between; 
-      margin-top: 20px;
+    h2 { color: var(--brand); margin-top:0; }
+    .nav-buttons { display:flex; justify-content:space-between; gap:12px; margin-top:20px; }
+    .nav-buttons button {
+      background: var(--brand); color:#fff; border:0; padding:10px 16px; border-radius:8px; cursor:pointer; font-size:15px;
     }
-    button {
-      background: #0a7ad1; 
-      color: white; 
-      padding: 10px 20px; 
-      border: none; 
-      border-radius: 6px; 
-      cursor: pointer;
-      font-size: 16px;
+    .nav-buttons button:hover { filter: brightness(0.92); }
+    .muted { opacity: 0.7; }
+    .loading { animation: pulse 1.25s ease-in-out infinite; }
+    @keyframes pulse { 0%{opacity: .5} 50%{opacity: 1} 100%{opacity:.5} }
+    pre {
+      white-space: pre-wrap; word-wrap: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #fff; border-radius:8px; padding:12px; margin:0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
     }
-    button:hover { background: #0663a4; }
-    footer {
-      background: #333; 
-      color: white; 
-      text-align: center; 
-      padding: 10px; 
-      margin-top: 20px;
+    footer { background:#333; color:#fff; text-align:center; padding:12px; margin-top:24px; }
+    @media (max-width:600px){
+      .nav-buttons { flex-direction: column; }
     }
   </style>
 </head>
 <body>
+  <header>📘 Aakash Singh Rawat - Welcome To My World</header>
 
-<header>
-  📘 Aakash Singh Rawat - Welcome To My World
-</header>
+  <!-- Tabs -->
+  <nav aria-label="Sections">
+    <button data-file="home.txt">Home</button>
+    <button data-file="python.txt">Python</button>
+    <button data-file="excel.txt">Excel</button>
+    <button data-file="sql.txt">SQL</button>
+  </nav>
 
-<nav>
-  <a onclick="loadContent('home.txt')">Home</a>
-  <a onclick="loadContent('python.txt')">Python</a>
-  <a onclick="loadContent('excel.txt')">Excel</a>
-  <a onclick="loadContent('sql.txt')">SQL</a>
-</nav>
+  <!-- Content -->
+  <div class="container">
+    <div class="card" id="content" aria-live="polite">
+      <h2>Welcome</h2>
+      <p class="muted">Click a tab above to load tutorial content.</p>
+    </div>
 
-<div class="container">
-  <div class="card" id="content">
-    <h2>Welcome</h2>
-    <p>Click a tab above to load tutorial content.</p>
+    <div class="nav-buttons">
+      <button id="prevBtn" type="button" aria-label="Previous section">⬅ Previous</button>
+      <button id="nextBtn" type="button" aria-label="Next section">Next ➡</button>
+    </div>
   </div>
-</div>
 
-<footer>
-  © 2025 Aakash Singh Rawat - Welcome To My World
-</footer>
+  <footer>© 2025 Aakash Singh Rawat - Welcome To My World</footer>
 
-<script>
-function loadContent(file) {
-  fetch(file)
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("content").innerHTML =
-        "<h2>" + file.replace('.txt','').toUpperCase() + " Tutorial</h2><pre>" + data + "</pre>";
-    })
-    .catch(err => {
-      document.getElementById("content").innerHTML = "<p style='color:red;'>Error loading " + file + "</p>";
+  <script>
+    // --- Configuration: tab order & titles ---
+    const tabs = [
+      { key: 'home',   file: 'home.txt',   title: 'HOME'   },
+      { key: 'python', file: 'python.txt', title: 'PYTHON' },
+      { key: 'excel',  file: 'excel.txt',  title: 'EXCEL'  },
+      { key: 'sql',    file: 'sql.txt',    title: 'SQL'    },
+    ];
+
+    const contentEl = document.getElementById('content');
+    const navEl = document.querySelector('nav');
+    const buttons = Array.from(navEl.querySelectorAll('button'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Map file -> button for active state
+    const fileToButton = Object.fromEntries(buttons.map(b => [b.dataset.file, b]));
+
+    // Load content helper
+    async function loadContentByKey(key, pushHash = true) {
+      const tab = tabs.find(t => t.key === key) || tabs[0];
+      // Active button UI
+      buttons.forEach(b => b.classList.toggle('active', b.dataset.file === tab.file));
+
+      // Loading state
+      contentEl.innerHTML = `
+        <h2 class="loading">${tab.title} Tutorial</h2>
+        <p class="muted loading">Loading ${tab.file}...</p>
+      `;
+
+      try {
+        const res = await fetch(tab.file, { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.text();
+
+        contentEl.innerHTML = `
+          <h2>${tab.title} Tutorial</h2>
+          <pre>${escapeHtml(data)}</pre>
+        `;
+
+        // Update URL hash for deep-linking
+        if (pushHash) location.hash = `#${tab.key}`;
+        updatePrevNext(key);
+
+      } catch (err) {
+        contentEl.innerHTML = `
+          <h2>${tab.title} Tutorial</h2>
+          <p style="color:#b00020"><strong>Error:</strong> Could not load <code>${tab.file}</code> (${err.message}).</p>
+          <p class="muted">Make sure the file exists in the same folder as index.html (names are case-sensitive).</p>
+        `;
+      }
+    }
+
+    // Escape text for safe <pre>
+    function escapeHtml(str) {
+      return str
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;');
+    }
+
+    // Prev/Next logic
+    function updatePrevNext(currentKey) {
+      const idx = tabs.findIndex(t => t.key === currentKey);
+      const prev = tabs[idx - 1] || null;
+      const next = tabs[idx + 1] || null;
+
+      prevBtn.disabled = !prev;
+      nextBtn.disabled = !next;
+
+      prevBtn.onclick = prev ? () => loadContentByKey(prev.key) : null;
+      nextBtn.onclick = next ? () => loadContentByKey(next.key) : null;
+    }
+
+    // Click handlers for navbar
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = tabs.find(t => t.file === btn.dataset.file)?.key;
+        if (key) loadContentByKey(key);
+      });
     });
-}
-</script>
 
+    // Hash routing: supports links like .../#python
+    function initFromHash() {
+      const hash = location.hash.replace('#','').toLowerCase();
+      const exists = tabs.some(t => t.key === hash);
+      loadContentByKey(exists ? hash : 'home', false);
+    }
+
+    window.addEventListener('hashchange', initFromHash);
+    // Initial load
+    initFromHash();
+  </script>
 </body>
 </html>
