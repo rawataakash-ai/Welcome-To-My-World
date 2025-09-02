@@ -77,8 +77,8 @@
 
       if (!tab) return;
 
-      if (Array.isArray(tab.files)) {
-        // Multiple sections (Python)
+      if (tabKey === "python") {
+        // Python with submenu
         let submenuHtml = `<div class="submenu">`;
         tab.files.forEach((f, idx) => {
           submenuHtml += `<button data-file="${f.file}" ${idx===0?"class='active'":""}>${f.name}</button>`;
@@ -91,15 +91,15 @@
           btn.addEventListener("click", () => {
             submenuButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-            loadContent(btn.dataset.file, btn.textContent);
+            loadContent(btn.dataset.file, `${tab.title} - ${btn.textContent}`);
           });
         });
 
         // Load first section by default
-        loadContent(tab.files[0].file, tab.files[0].name);
+        loadContent(tab.files[0].file, `${tab.title} - ${tab.files[0].name}`);
 
       } else {
-        // Single file (Home, Excel, SQL)
+        // Home, Excel, SQL → single file
         loadContent(tab.files[0], tab.title);
       }
     }
