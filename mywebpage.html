@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aakash Singh Rawat - Welcome To My World</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; }
+    header {
+      background: #0a7ad1; 
+      color: white; 
+      padding: 15px; 
+      text-align: center; 
+      font-size: 20px;
+    }
+    nav {
+      background: #333; 
+      display: flex; 
+      flex-wrap: wrap;
+      padding: 10px;
+    }
+    nav a {
+      color: white; 
+      margin: 5px 10px; 
+      text-decoration: none; 
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    nav a:hover { background: #555; border-radius: 5px; }
+    .container { padding: 20px; }
+    .card {
+      background: #e9f5ff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    h2 { color: #0a7ad1; }
+    .nav-buttons {
+      display: flex; 
+      justify-content: space-between; 
+      margin-top: 20px;
+    }
+    button {
+      background: #0a7ad1; 
+      color: white; 
+      padding: 10px 20px; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #0663a4; }
+    footer {
+      background: #333; 
+      color: white; 
+      text-align: center; 
+      padding: 10px; 
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  📘 Aakash Singh Rawat - Welcome To My World
+</header>
+
+<nav>
+  <a onclick="loadContent('home.txt')">Home</a>
+  <a onclick="loadContent('python.txt')">Python</a>
+  <a onclick="loadContent('excel.txt')">Excel</a>
+  <a onclick="loadContent('sql.txt')">SQL</a>
+</nav>
+
+<div class="container">
+  <div class="card" id="content">
+    <h2>Welcome</h2>
+    <p>Click a tab above to load tutorial content.</p>
+  </div>
+</div>
+
+<footer>
+  © 2025 Aakash Singh Rawat - Welcome To My World
+</footer>
+
+<script>
+function loadContent(file) {
+  fetch(file)
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("content").innerHTML =
+        "<h2>" + file.replace('.txt','').toUpperCase() + " Tutorial</h2><pre>" + data + "</pre>";
+    })
+    .catch(err => {
+      document.getElementById("content").innerHTML = "<p style='color:red;'>Error loading " + file + "</p>";
+    });
+}
+</script>
+
+</body>
+</html>

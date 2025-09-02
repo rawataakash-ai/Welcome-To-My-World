@@ -1,0 +1,8 @@
+Welcome to Aakash Singh Rawat's Tutorial Website!
+
+This site contains tutorials on:
+- Python
+- Excel
+- SQL
+
+Click a tab above to start learning 🚀

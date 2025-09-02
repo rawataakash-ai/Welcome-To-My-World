@@ -1,0 +1,10 @@
+Excel is one of the most powerful tools for data analysis.
+
+Key Features:
+- Formulas (SUM, AVERAGE, IF, VLOOKUP, INDEX-MATCH)
+- Pivot Tables
+- Charts & Graphs
+- Macros with VBA
+
+Pro Tip:
+=IF(A2>50,"Pass","Fail")

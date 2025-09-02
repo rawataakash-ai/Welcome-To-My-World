@@ -1,0 +1,10 @@
+Python is a versatile programming language.
+It is widely used in:
+
+1. Web Development (Django, Flask, FastAPI)
+2. Data Science (Pandas, NumPy, Matplotlib)
+3. Machine Learning (TensorFlow, PyTorch, Scikit-learn)
+4. Automation (Scripting, Bots)
+
+Example Code:
+print("Hello, World!")
