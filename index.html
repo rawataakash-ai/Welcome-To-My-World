@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -55,7 +55,11 @@
           { name: "Advanced", file: "python_advanced.txt" }
         ] 
       },
-      excel: { title: "Excel", files: ["excel.txt"] },
+      // Excel will list downloadable .xlsx files instead of txt
+      excel: { 
+        title: "Excel", 
+        excelFiles: ["data1.xlsx", "data2.xlsx", "report.xlsx"] 
+      },
       sql: { title: "SQL", files: ["sql.txt"] }
     };
 
@@ -74,7 +78,6 @@
     function setActiveTab(tabKey) {
       navButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tabKey));
       const tab = tabs[tabKey];
-
       if (!tab) return;
 
       if (tabKey === "python") {
@@ -98,8 +101,17 @@
         // Load first section by default
         loadContent(tab.files[0].file, `${tab.title} - ${tab.files[0].name}`);
 
+      } else if (tabKey === "excel") {
+        // Show Excel files as download links
+        let list = "<ul>";
+        tab.excelFiles.forEach(f => {
+          list += `<li>📥 <a href="${f}" download>${f}</a></li>`;
+        });
+        list += "</ul>";
+        contentEl.innerHTML = `<h2>${tab.title}</h2><p>Available Excel Files:</p>${list}`;
+
       } else {
-        // Home, Excel, SQL → single file
+        // Home, SQL → single file
         loadContent(tab.files[0], tab.title);
       }
     }
