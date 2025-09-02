@@ -23,12 +23,8 @@
     }
     .submenu button.active { background:var(--brand); color:#fff; }
     pre { white-space:pre-wrap; background:#fff; padding:12px; border-radius:8px; }
-    table { border-collapse: collapse; margin-top:10px; background:#fff; }
-    table, th, td { border: 1px solid #ccc; padding:8px; text-align:left; }
     footer { background:#333; color:#fff; text-align:center; padding:12px; margin-top:20px; }
   </style>
-  <!-- SheetJS library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
   <header>📘 Welcome To My World - Aakash Singh Rawat</header>
@@ -59,9 +55,10 @@
           { name: "Advanced", file: "python_advanced.txt" }
         ] 
       },
+      // Excel will list downloadable .xlsx files instead of txt
       excel: { 
         title: "Excel", 
-        excelFiles: ["data1.xlsx", "data2.xlsx","data2.xlsx"] 
+        excelFiles: ["data1.xlsx", "data2.xlsx", "data3.xlsx"] 
       },
       sql: { title: "SQL", files: ["sql.txt"] }
     };
@@ -76,20 +73,6 @@
       }).catch(() => {
         contentEl.innerHTML = `<h2>${sectionTitle}</h2><p style="color:red">Error loading ${file}</p>`;
       });
-    }
-
-    async function loadExcel(file) {
-      contentEl.innerHTML = `<h2>Excel - ${file}</h2><p>Loading...</p>`;
-      try {
-        const response = await fetch(file);
-        const data = await response.arrayBuffer();
-        const workbook = XLSX.read(data, { type: "array" });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const html = XLSX.utils.sheet_to_html(sheet, { header:1 });
-        contentEl.innerHTML = `<h2>Excel - ${file}</h2>${html}`;
-      } catch (err) {
-        contentEl.innerHTML = `<h2>Excel - ${file}</h2><p style="color:red">Error loading Excel file</p>`;
-      }
     }
 
     function setActiveTab(tabKey) {
@@ -119,13 +102,13 @@
         loadContent(tab.files[0].file, `${tab.title} - ${tab.files[0].name}`);
 
       } else if (tabKey === "excel") {
-        // Show Excel files as clickable
-        let list = "<p>Select an Excel file to view:</p><ul>";
+        // Show Excel files as download links
+        let list = "<ul>";
         tab.excelFiles.forEach(f => {
-          list += `<li><button onclick="loadExcel('${f}')">📊 View ${f}</button></li>`;
+          list += `<li>📥 <a href="${f}" download>${f}</a></li>`;
         });
         list += "</ul>";
-        contentEl.innerHTML = `<h2>${tab.title}</h2>${list}`;
+        contentEl.innerHTML = `<h2>${tab.title}</h2><p>Available Excel Files:</p>${list}`;
 
       } else {
         // Home, SQL → single file
@@ -144,4 +127,3 @@
   </script>
 </body>
 </html>
-
