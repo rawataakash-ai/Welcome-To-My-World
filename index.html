@@ -5,29 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome To My World - Aakash Singh Rawat</title>
   <style>
-    :root { --brand:#0a7ad1; --bg:#f8f8f8; --card:#e9f5ff; }
-    body { margin:0; font-family: Arial, sans-serif; background: var(--bg); }
-    header { background: var(--brand); color:#fff; padding:14px 16px; text-align:center; font-weight:600; }
-    nav { background:#333; display:flex; gap:8px; padding:10px; }
+    :root {
+      --top: #E46C0A;
+      --second: #FFC000;
+      --third: #92D050;
+      --bottom: #00B0F0;
+      --bg: #f8f8f8;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+    }
+
+    header {
+      background: var(--top);
+      color: #fff;
+      padding: 14px 16px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .marquee {
+      background: var(--second);
+      color: #333;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      padding: 10px 0;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 15s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    nav {
+      background: #333;
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+    }
+
     nav button {
-      border:0; background:transparent; color:#fff; padding:8px 12px; border-radius:6px; cursor:pointer;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    nav button.active { background:#fff; color:#333; font-weight:bold; }
-    .container { padding:20px; max-width:1000px; margin:auto; }
-    .card { background:var(--card); padding:20px; border-radius:12px; }
-    h2 { color:var(--brand); }
-    .submenu { margin-bottom:15px; }
+
+    nav button.active {
+      background: #fff;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: var(--third);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    h2 {
+      color: var(--top);
+    }
+
+    .submenu {
+      margin-bottom: 15px;
+    }
+
     .submenu button {
-      margin-right:10px; padding:6px 10px; border:1px solid var(--brand); border-radius:6px;
-      background:#fff; cursor:pointer; font-size:14px;
+      margin-right: 10px;
+      padding: 6px 10px;
+      border: 1px solid var(--top);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
     }
-    .submenu button.active { background:var(--brand); color:#fff; }
-    pre { white-space:pre-wrap; background:#fff; padding:12px; border-radius:8px; }
-    footer { background:#333; color:#fff; text-align:center; padding:12px; margin-top:20px; }
+
+    .submenu button.active {
+      background: var(--top);
+      color: #fff;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    footer {
+      background: var(--bottom);
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <header>📘 Welcome To My World - Aakash Singh Rawat</header>
+
+  <!-- 🚀 Marquee Section -->
+  <div class="marquee">
+    <div class="marquee-content">
+      🚀 Hello Revansh Singh Rawat, How are you? How is your 100-day no mobile challenge going? 🎓
+    </div>
+  </div>
 
   <nav>
     <button data-tab="home">Home</button>
@@ -55,7 +158,6 @@
           { name: "Advanced", file: "python_advanced.txt" }
         ] 
       },
-      // Excel will list downloadable .xlsx files instead of txt
       excel: { 
         title: "Excel", 
         excelFiles: ["data1.xlsx", "data2.xlsx", "data3.xlsx"] 
@@ -81,7 +183,6 @@
       if (!tab) return;
 
       if (tabKey === "python") {
-        // Python with submenu
         let submenuHtml = `<div class="submenu">`;
         tab.files.forEach((f, idx) => {
           submenuHtml += `<button data-file="${f.file}" ${idx===0?"class='active'":""}>${f.name}</button>`;
@@ -98,11 +199,9 @@
           });
         });
 
-        // Load first section by default
         loadContent(tab.files[0].file, `${tab.title} - ${tab.files[0].name}`);
 
       } else if (tabKey === "excel") {
-        // Show Excel files as download links
         let list = "<ul>";
         tab.excelFiles.forEach(f => {
           list += `<li>📥 <a href="${f}" download>${f}</a></li>`;
@@ -111,7 +210,6 @@
         contentEl.innerHTML = `<h2>${tab.title}</h2><p>Available Excel Files:</p>${list}`;
 
       } else {
-        // Home, SQL → single file
         loadContent(tab.files[0], tab.title);
       }
     }
@@ -122,7 +220,6 @@
       });
     });
 
-    // Default load
     setActiveTab("home");
   </script>
 </body>
