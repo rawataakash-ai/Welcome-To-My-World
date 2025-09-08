@@ -84,6 +84,19 @@
       border-radius: 12px;
     }
 
+    .video-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+
+    .video-card h2 {
+      color: var(--top);
+      margin-bottom: 12px;
+    }
+
     h2 {
       color: var(--top);
     }
@@ -138,11 +151,11 @@
       🚀 Hello Revansh Singh Rawat, How are you? How is your 100-day no mobile challenge going? 🎓
     </div>
   </div>
-<div class="marquee">
-  <div class="marquee-content">
-    🎯 Akshat Singh Rawat, keep shining! Your creativity and curiosity make you unstoppable in your YOUTUBE Journey 💡
+  <div class="marquee">
+    <div class="marquee-content">
+      🎯 Akshat Singh Rawat, keep shining! Your creativity and curiosity make you unstoppable in your YOUTUBE Journey 💡
+    </div>
   </div>
-</div>
 
   <nav>
     <button data-tab="home">Home</button>
@@ -155,8 +168,15 @@
 
   <div class="container">
     <div class="card" id="content">
-      <h2>Welcome</h2>
-      <p>Click a tab above to load tutorial content.</p>
+      <h2>Welcome to Chilar Jokes</h2>
+    </div>
+
+    <div class="video-card">
+      <h2>🎬 Back Benchers</h2>
+      <video width="100%" controls poster="thumbnail.jpg">
+        <source src="D:\Python2\Master\Web_Page\Back_Benchers.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
   </div>
 
@@ -164,7 +184,6 @@
 
   <script>
     const tabs = {
-      home: { title: "Home", files: ["home.txt"] },
       python: { 
         title: "Python", 
         files: [
@@ -236,8 +255,10 @@
           <h2>${tab.title}</h2>
           <img src="${tab.image}" alt="${tab.title}" class="profile">
         `;
-      } else {
+      } else if (tab.files) {
         loadContent(tab.files[0], tab.title);
+      } else {
+        contentEl.innerHTML = `<h2>${tab.title}</h2>`;
       }
     }
 
