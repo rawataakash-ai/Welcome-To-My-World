@@ -27,6 +27,16 @@
       font-weight: 600;
     }
 
+    .countdown-bar {
+      background: var(--third);
+      color: #333;
+      text-align: center;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 2px solid var(--top);
+    }
+
     .marquee {
       background: var(--second);
       color: #333;
@@ -146,6 +156,10 @@
 <body>
   <header>📘 Welcome To My World - Aakash Singh Rawat</header>
 
+  <div class="countdown-bar">
+    ⏳ <span id="countdown">Loading countdown...</span>
+  </div>
+
   <div class="marquee">
     <div class="marquee-content">
       🚀 Hello Revansh Singh Rawat, How are you? How is your 100-day no mobile challenge going? 🎓
@@ -166,104 +180,42 @@
     <button data-tab="akshat">Akshat</button>
   </nav>
 
-<div class="video-card">
-  <h2>🎬 Welcome to Chilar Jokes-Back Benchers</h2>
-  <video width="100%" controls poster="thumbnail.jpg" style="border-radius:12px;">
-    <source src="https://github.com/rawataakash-ai/Welcome-To-My-World/raw/main/Back_Benchers.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <p style="text-align:center; margin-top:10px;">📺 Watch our Back Benchers moment hosted on GitHub</p>
-</div>
+  <div class="video-card">
+    <h2>🎬 Welcome to Chilar Jokesh - Back Benchers</h2>
+    <video width="100%" controls poster="thumbnail.jpg" style="border-radius:12px;">
+      <source src="https://github.com/rawataakash-ai/Welcome-To-My-World/raw/main/Back_Benchers.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p style="text-align:center; margin-top:10px;">📺 Watch our Back Benchers moment hosted on GitHub</p>
+  </div>
 
   <footer>© 2025 Aakash Singh Rawat - Welcome To My World</footer>
 
   <script>
-    const tabs = {
-      python: { 
-        title: "Python", 
-        files: [
-          { name: "Basics", file: "python_basics.txt" },
-          { name: "Advanced", file: "python_advanced.txt" }
-        ] 
-      },
-      excel: { 
-        title: "Excel", 
-        excelFiles: ["data1.xlsx", "data2.xlsx", "data3.xlsx"] 
-      },
-      sql: { title: "SQL", files: ["sql.txt"] },
-      revansh: {
-        title: "Revansh Singh Rawat",
-        image: "revansh.jpg"
-      },
-      akshat: {
-        title: "Akshat Singh Rawat",
-        image: "akshat.jpg"
+    document.addEventListener("DOMContentLoaded", function () {
+      const targetDate = new Date("2025-11-21T00:00:00").getTime();
+      const countdownEl = document.getElementById("countdown");
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          countdownEl.innerHTML = "🎉 Challenge Completed!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((distance / (1000 * 60)) % 60);
+        const seconds = Math.floor((distance / 1000) % 60);
+
+        countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s remaining to Complete 100 days challenge`;
       }
-    };
 
-    const contentEl = document.getElementById("content");
-    const navButtons = document.querySelectorAll("nav button");
-
-    function loadContent(file, sectionTitle) {
-      contentEl.innerHTML = `<h2>${sectionTitle}</h2><p>Loading...</p>`;
-      fetch(file).then(r => r.text()).then(txt => {
-        contentEl.innerHTML = `<h2>${sectionTitle}</h2><pre>${txt}</pre>`;
-      }).catch(() => {
-        contentEl.innerHTML = `<h2>${sectionTitle}</h2><p style="color:red">Error loading ${file}</p>`;
-      });
-    }
-
-    function setActiveTab(tabKey) {
-      navButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tabKey));
-      const tab = tabs[tabKey];
-      if (!tab) return;
-
-      if (tabKey === "python") {
-        let submenuHtml = `<div class="submenu">`;
-        tab.files.forEach((f, idx) => {
-          submenuHtml += `<button data-file="${f.file}" ${idx===0?"class='active'":""}>${f.name}</button>`;
-        });
-        submenuHtml += `</div><div id="sectionContent"></div>`;
-        contentEl.innerHTML = `<h2>${tab.title} Tutorial</h2>${submenuHtml}`;
-
-        const submenuButtons = contentEl.querySelectorAll(".submenu button");
-        submenuButtons.forEach(btn => {
-          btn.addEventListener("click", () => {
-            submenuButtons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            loadContent(btn.dataset.file, `${tab.title} - ${btn.textContent}`);
-          });
-        });
-
-        loadContent(tab.files[0].file, `${tab.title} - ${tab.files[0].name}`);
-
-      } else if (tabKey === "excel") {
-        let list = "<ul>";
-        tab.excelFiles.forEach(f => {
-          list += `<li>📥 <a href="${f}" download>${f}</a></li>`;
-        });
-        list += "</ul>";
-        contentEl.innerHTML = `<h2>${tab.title}</h2><p>Available Excel Files:</p>${list}`;
-
-      } else if (tab.image) {
-        contentEl.innerHTML = `
-          <h2>${tab.title}</h2>
-          <img src="${tab.image}" alt="${tab.title}" class="profile">
-        `;
-      } else if (tab.files) {
-        loadContent(tab.files[0], tab.title);
-      } else {
-        contentEl.innerHTML = `<h2>${tab.title}</h2>`;
-      }
-    }
-
-    navButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        setActiveTab(btn.dataset.tab);
-      });
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
     });
-
-    setActiveTab("home");
   </script>
 </body>
 </html>
