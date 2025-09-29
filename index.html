@@ -37,6 +37,16 @@
       border-bottom: 2px solid var(--top);
     }
 
+    .challenge-info {
+      background: var(--third);
+      color: #000;
+      text-align: center;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border-bottom: 2px solid var(--top);
+    }
+
     .marquee {
       background: var(--second);
       color: #333;
@@ -88,60 +98,38 @@
       margin: auto;
     }
 
-    .card {
-      background: var(--third);
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    .video-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    .tab-section {
+      display: none;
       margin-top: 20px;
-    }
-
-    .video-card h2 {
-      color: var(--top);
-      margin-bottom: 12px;
     }
 
     h2 {
       color: var(--top);
     }
 
-    .submenu {
-      margin-bottom: 15px;
+    ul {
+      list-style: none;
+      padding-left: 0;
     }
 
-    .submenu button {
-      margin-right: 10px;
-      padding: 6px 10px;
-      border: 1px solid var(--top);
-      border-radius: 6px;
-      background: #fff;
-      cursor: pointer;
-      font-size: 14px;
+    ul li {
+      margin-bottom: 10px;
     }
 
-    .submenu button.active {
-      background: var(--top);
-      color: #fff;
+    a {
+      color: var(--top);
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    pre {
-      white-space: pre-wrap;
-      background: #fff;
-      padding: 12px;
-      border-radius: 8px;
+    a:hover {
+      text-decoration: underline;
     }
 
-    img.profile {
-      max-width: 100%;
+    video {
+      width: 100%;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      margin-top: 20px;
     }
 
     footer {
@@ -160,9 +148,18 @@
     ⏳ <span id="countdown">Loading countdown...</span>
   </div>
 
+  <div class="challenge-info">
+    📘 50-Day English Speaking Challenge Activated — Total Reward Points: <span id="english-points">Calculating...</span>
+  </div>
+
   <div class="marquee">
     <div class="marquee-content">
       🚀 Hello Revansh Singh Rawat, How are you? How is your 100-day no mobile challenge going? 🎓
+    </div>
+  </div>
+  <div class="marquee">
+    <div class="marquee-content">
+      📢 New English Speaking Challenge is activated for Revansh Singh Rawat. Let's go! 🗣️
     </div>
   </div>
   <div class="marquee">
@@ -180,19 +177,35 @@
     <button data-tab="akshat">Akshat</button>
   </nav>
 
-  <div class="video-card">
-    <h2>🎬 Welcome to Chilar Jokesh - Back Benchers</h2>
-    <video width="100%" controls poster="thumbnail.jpg" style="border-radius:12px;">
-      <source src="https://github.com/rawataakash-ai/Welcome-To-My-World/raw/main/Back_Benchers.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <p style="text-align:center; margin-top:10px;">📺 Watch our Back Benchers moment hosted on GitHub</p>
+  <div class="container">
+    <div id="tab-content">
+      <!-- Excel Tab Content -->
+      <div id="excel-tab" class="tab-section">
+        <h2>📊 Excel Files</h2>
+        <ul>
+          <li><a href="files/data1.xlsx" download>Data1.xlsx</a></li>
+          <li><a href="files/data2.xlsx" download>Data2.xlsx</a></li>
+          <li><a href="files/data3.xlsx" download>Data3.xlsx</a></li>
+        </ul>
+      </div>
+
+      <!-- Akshat Tab Content -->
+      <div id="akshat-tab" class="tab-section">
+        <h2>🎬 Welcome to Chilar Jokesh - Back Benchers</h2>
+        <video controls poster="thumbnail.jpg">
+          <source src="https://github.com/rawataakash-ai/Welcome-To-My-World/raw/main/Back_Benchers.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p style="text-align:center; margin-top:10px;">📺 Watch our Back Benchers moment hosted on GitHub</p>
+      </div>
+    </div>
   </div>
 
   <footer>© 2025 Aakash Singh Rawat - Welcome To My World</footer>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      // Countdown for 100-day challenge
       const targetDate = new Date("2025-11-21T00:00:00").getTime();
       const countdownEl = document.getElementById("countdown");
 
@@ -215,6 +228,39 @@
 
       updateCountdown();
       setInterval(updateCountdown, 1000);
+
+      // Tab switching logic
+      const buttons = document.querySelectorAll("nav button");
+      const sections = document.querySelectorAll(".tab-section");
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          sections.forEach(sec => sec.style.display = "none");
+          const tabId = btn.getAttribute("data-tab") + "-tab";
+          const activeTab = document.getElementById(tabId);
+          if (activeTab) activeTab.style.display = "block";
+        });
+      });
+
+// Dynamic points for 50-day English challenge
+const englishStartDate = new Date("2025-09-26T00:00:00").getTime(); // Challenge started 4 days ago
+const today = new Date().getTime();
+const dayNumber = Math.floor((today - englishStartDate) / (1000 * 60 * 60 * 24)) + 1;
+
+const rewardPerDay = 20;
+const totalPoints = dayNumber * rewardPerDay;
+
+const pointsEl = document.getElementById("english-points");
+if (dayNumber > 0 && dayNumber <= 50) {
+  pointsEl.innerText = `${totalPoints} (Day ${dayNumber})`;
+} else if (dayNumber > 50) {
+  pointsEl.innerText = `Challenge Completed 🎉`;
+} else {
+  pointsEl.innerText = `Challenge Not Started Yet`;
+}
     });
   </script>
 </body>
