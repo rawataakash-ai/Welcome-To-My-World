@@ -149,7 +149,10 @@
   </div>
 
   <div class="challenge-info">
-    📘 50-Day English Speaking Challenge Activated — Total Reward Points: <span id="english-points">Calculating...</span>
+    📘 Revans Singh Rawat - 50-Day English Speaking Challenge Activated — Total Reward Points: <span id="english-points">Calculating...</span>
+  </div>
+<div class="challenge-info">
+    📘 Akshat Singh Rawat - 50-Day English Speaking and Paragraph Writing Challenge Activated — Total Reward Points: <span id="akshat-points">Calculating...</span>
   </div>
 
   <div class="marquee">
@@ -159,9 +162,15 @@
   </div>
   <div class="marquee">
     <div class="marquee-content">
-      📢 New English Speaking Challenge is activated for Revansh Singh Rawat. Let's go! 🗣️
+      📢 New English Speaking Challenge is Activated for Revansh Singh Rawat. Let's go! 🗣️
     </div>
   </div>
+<div class="marquee">
+    <div class="marquee-content">
+      📢 New English Speaking and Pragraph Writing Challenge is Activated for Akshat Singh Rawat. Let's go! 🗣️
+    </div>
+  </div>
+
   <div class="marquee">
     <div class="marquee-content">
       🎯 Akshat Singh Rawat, keep shining! Your creativity and curiosity make you unstoppable in your YOUTUBE Journey 💡
@@ -261,6 +270,25 @@ if (dayNumber > 0 && dayNumber <= 50) {
 } else {
   pointsEl.innerText = `Challenge Not Started Yet`;
 }
+
+
+// Dynamic points for Akshat's 50-day English challenge
+const akshatStartDate = new Date("2025-09-29T00:00:00").getTime(); // Akshat's challenge start date
+const akshatToday = new Date().getTime();
+const akshatDay = Math.floor((akshatToday - akshatStartDate) / (1000 * 60 * 60 * 24)) + 1;
+
+const akshatRewardPerDay = 20;
+const akshatTotalPoints = akshatDay * akshatRewardPerDay;
+
+const akshatPointsEl = document.getElementById("akshat-points");
+if (akshatDay > 0 && akshatDay <= 50) {
+  akshatPointsEl.innerText = `${akshatTotalPoints} (Day ${akshatDay})`;
+} else if (akshatDay > 50) {
+  akshatPointsEl.innerText = `Challenge Completed 🎉`;
+} else {
+  akshatPointsEl.innerText = `Challenge Not Started Yet`;
+}
+
     });
   </script>
 </body>
