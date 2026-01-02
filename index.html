@@ -37,6 +37,10 @@
       border-bottom: 2px solid var(--top);
     }
 
+    .countdown-bar.secondary {
+      background: #FFD966;
+    }
+
     .challenge-info {
       background: var(--third);
       color: #000;
@@ -144,14 +148,20 @@
 <body>
   <header>📘 Welcome To My World - Aakash Singh Rawat</header>
 
+  <!-- Existing 100-day mobile challenge countdown -->
   <div class="countdown-bar">
     ⏳ <span id="countdown">Loading countdown...</span>
+  </div>
+
+  <!-- New Revansh 50-day English challenge countdown -->
+  <div class="countdown-bar secondary">
+    ⏳ <span id="revansh-countdown">Loading Revansh's challenge countdown...</span>
   </div>
 
   <div class="challenge-info">
     📘 Revansh Singh Rawat - New 50-Day English Speaking Challenge Activated — Total Reward Points: <span id="english-points">Calculating...</span>
   </div>
-<div class="challenge-info">
+  <div class="challenge-info">
     📘 Akshat Singh Rawat - 50-Day English Speaking and Paragraph Writing Challenge Activated — Total Reward Points: <span id="akshat-points">Calculating...</span>
   </div>
 
@@ -165,12 +175,11 @@
       📢 New English Speaking Challenge is Activated for Revansh Singh Rawat. Let's go! 🗣️
     </div>
   </div>
-<div class="marquee">
+  <div class="marquee">
     <div class="marquee-content">
-      📢 New English Speaking and Pragraph Writing Challenge is Activated for Akshat Singh Rawat. Let's go! 🗣️
+      📢 New English Speaking and Paragraph Writing Challenge is Activated for Akshat Singh Rawat. Let's go! 🗣️
     </div>
   </div>
-
   <div class="marquee">
     <div class="marquee-content">
       🎯 Akshat Singh Rawat, keep shining! Your creativity and curiosity make you unstoppable in your YOUTUBE Journey 💡
@@ -214,12 +223,14 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
       // Countdown for 100-day challenge
       const targetDate = new Date("2025-11-21T00:00:00").getTime();
       const countdownEl = document.getElementById("countdown");
 
       function updateCountdown() {
-        const now = new Date().getTime();
+        const now = Date.now();
         const distance = targetDate - now;
 
         if (distance < 0) {
@@ -227,7 +238,7 @@
           return;
         }
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const days = Math.floor(distance / MS_PER_DAY);
         const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((distance / (1000 * 60)) % 60);
         const seconds = Math.floor((distance / 1000) % 60);
@@ -238,7 +249,74 @@
       updateCountdown();
       setInterval(updateCountdown, 1000);
 
-      // Tab switching logic
+      // Countdown for Revansh's 50-day English challenge (UTC-safe)
+      const revanshStartUTC = Date.UTC(2026, 0, 1, 0, 0, 0); // Jan=0
+      const revanshEndUTC = revanshStartUTC + (50 * MS_PER_DAY);
+      const revanshCountdownEl = document.getElementById("revansh-countdown");
+
+      function updateRevanshCountdown() {
+        const now = Date.now();
+        const distance = revanshEndUTC - now;
+
+        if (!revanshCountdownEl) return;
+
+        if (distance < 0) {
+          revanshCountdownEl.innerHTML = "🎉 Revansh's 50-day English Challenge Completed!";
+          return;
+        }
+
+        const days = Math.floor(distance / MS_PER_DAY);
+        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((distance / (1000 * 60)) % 60);
+        const seconds = Math.floor((distance / 1000) % 60);
+
+        revanshCountdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s remaining in Revansh's 50-day English Challenge`;
+      }
+
+      updateRevanshCountdown();
+      setInterval(updateRevanshCountdown, 1000);
+
+      // Points for Revansh (UTC-safe)
+      const englishPointsEl = document.getElementById("english-points");
+      if (englishPointsEl) {
+        const now = Date.now();
+        const startUTC = revanshStartUTC;
+        const rewardPerDay = 20;
+
+        if (now < startUTC) {
+          englishPointsEl.innerText = "Challenge Not Started Yet";
+        } else {
+          const dayNumber = Math.floor((now - startUTC) / MS_PER_DAY) + 1;
+          if (dayNumber <= 50) {
+            const totalPoints = dayNumber * rewardPerDay;
+            englishPointsEl.innerText = `${totalPoints} (Day ${dayNumber})`;
+          } else {
+            englishPointsEl.innerText = "Challenge Completed 🎉";
+          }
+        }
+      }
+
+      // Points for Akshat (UTC-safe)
+      const akshatPointsEl = document.getElementById("akshat-points");
+      if (akshatPointsEl) {
+        const akshatStartUTC = Date.UTC(2025, 8, 29, 0, 0, 0); // 29 Sep 2025 (Sep=8)
+        const now = Date.now();
+        const rewardPerDay = 20;
+
+        if (now < akshatStartUTC) {
+          akshatPointsEl.innerText = "Challenge Not Started Yet";
+        } else {
+          const akshatDay = Math.floor((now - akshatStartUTC) / MS_PER_DAY) + 1;
+          if (akshatDay <= 50) {
+            const akshatTotalPoints = akshatDay * rewardPerDay;
+            akshatPointsEl.innerText = `${akshatTotalPoints} (Day ${akshatDay})`;
+          } else {
+            akshatPointsEl.innerText = "Challenge Completed 🎉";
+          }
+        }
+      }
+
+      // Tab switching logic (safe even if some tabs are missing)
       const buttons = document.querySelectorAll("nav button");
       const sections = document.querySelectorAll(".tab-section");
 
@@ -253,47 +331,7 @@
           if (activeTab) activeTab.style.display = "block";
         });
       });
-
-// Dynamic points for 50-day English challenge
-const englishStartDate = new Date("2026-1-1T00:00:00").getTime(); // Challenge started 4 days ago
-const today = new Date().getTime();
-const dayNumber = Math.floor((today - englishStartDate) / (1000 * 60 * 60 * 24)) + 1;
-
-const rewardPerDay = 20;
-const totalPoints = dayNumber * rewardPerDay;
-
-const pointsEl = document.getElementById("english-points");
-if (dayNumber > 0 && dayNumber <= 50) {
-  pointsEl.innerText = `${totalPoints} (Day ${dayNumber})`;
-} else if (dayNumber > 50) {
-  pointsEl.innerText = `Challenge Completed 🎉`;
-} else {
-  pointsEl.innerText = `Challenge Not Started Yet`;
-}
-
-
-// Dynamic points for Akshat's 50-day English challenge
-const akshatStartDate = new Date("2025-09-30T00:00:00").getTime(); // Akshat's challenge start date
-const akshatToday = new Date().getTime();
-const akshatDay = Math.floor((akshatToday - akshatStartDate) / (1000 * 60 * 60 * 24)) + 1;
-
-const akshatRewardPerDay = 20;
-const akshatTotalPoints = akshatDay * akshatRewardPerDay;
-
-const akshatPointsEl = document.getElementById("akshat-points");
-if (akshatDay > 0 && akshatDay <= 50) {
-  akshatPointsEl.innerText = `${akshatTotalPoints} (Day ${akshatDay})`;
-} else if (akshatDay > 50) {
-  akshatPointsEl.innerText = `Challenge Completed 🎉`;
-} else {
-  akshatPointsEl.innerText = `Challenge Not Started Yet`;
-}
-
     });
   </script>
 </body>
 </html>
-
-
-
-
